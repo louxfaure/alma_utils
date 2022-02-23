@@ -1,0 +1,3 @@
+Bonjour, 
+Le traitement du fichier {{ process.file_upload.name }} est terminé. {{ num_line }} exempalires ont été traités.
+RDV sur la plateforme pour téléécharger le rapport de traitement.
