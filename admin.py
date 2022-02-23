@@ -32,7 +32,7 @@ class ExecuteJobThread(threading.Thread):
 @admin.register(ProcessUpdateItem)
 class UpdateItemProcesss(admin.ModelAdmin):
     list_display = ('id', 'institution', 'base', 'start_date', 'end_date','num_title_to_processed', 'is_done','num_title_processed','link_file_download')
-    ordering = ('start_date',)
+    ordering = ('-start_date',)
     search_fields = ('file_upload',)
     fieldsets = (
         (None, {
@@ -53,26 +53,18 @@ class UpdateItemProcesss(admin.ModelAdmin):
         return super(UpdateItemProcesss, self).render_change_form(request,
             context, *args, **kwargs)
 
+    def message_user(self, request, message, level=messages.INFO, extra_tags='',
+                 fail_silently=False):
+        pass
+
 
     def save_model(self, request, obj, form, change):
-        # Teste s'il reste suffisamment d'appels d'Api autorisés pour lancer le traitement sur toutes les lignes du fichier
-        alma_api = Alma_Apis.AlmaRecords(apikey=settings.ALMA_API_KEY[form.cleaned_data['institution']], region='EU', service=__name__)
-        status,nb_api_call = alma_api.get_api_remaining()
-        if status == "Error" :
-            # Pb. de clef où indisponibilité du service
-            messages.error(request,"L'API Alma remonte l'erreur suivante :  {}".format(nb_api_call))
-            return HttpResponseRedirect("/admin/alma_utils/processupdateitem/add")
-        num_ligne = sum(1 for line in request.FILES['file_upload']) - 1
-        if (num_ligne*3) > (int(nb_api_call) - 10000) :
-            messages.error(request,"Nous ne disposons que de {} appels d'API pour la journée. Votre fichier contient {} lignes. Il faut deux appels par ligne pour traiter le fichier. Merci de diminuer le nombre de lignes à traiter".format(nb_api_call,num_ligne))
-            return HttpResponseRedirect("/admin/alma_utils/processupdateitem/add")
-        
         user = request.user
         form.save(commit=False)
-        obj.num_title_to_processed = num_ligne
+        obj.num_title_to_processed = sum(1 for line in request.FILES['file_upload']) - 1
         obj.user = user
         obj.save()
         logger.info("Process cree")            
         ExecuteJobThread(obj).start()
         messages.success(request, 'L''analyse a été lancée . Vous recevrez un message sur {} à la fin du traitement'.format( user.email))
-        return HttpResponseRedirect("/admin/alma_utils/processupdateitem/")
+        pass

@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError
-import mimetypes
 import csv
 import logging
 from io import StringIO
