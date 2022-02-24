@@ -42,17 +42,15 @@ class UpdateItemProcesss(admin.ModelAdmin):
     )
     form = UploadFileForm
 
+    # Ajoute un bloc dédié au messade utilisateur
     def render_change_form(self, request, context, *args, **kwargs):
         # here we define a custom template
         self.change_form_template = 'alma_utils/message_aide.html'
-        extra = {
-            'help_text': "This is a help message. Good luck filling out the form."
-        }
-
-        context.update(extra)
+        
         return super(UpdateItemProcesss, self).render_change_form(request,
             context, *args, **kwargs)
-
+            
+    # Empêche le message standart d'enregistrement d'un modèle à l'execution d'un traitement
     def message_user(self, request, message, level=messages.INFO, extra_tags='',
                  fail_silently=False):
         pass
