@@ -33,7 +33,11 @@ class UploadFileForm(ModelForm):
         if status == "Error" :
             # Pb. de clef où indisponibilité du service
             raise ValidationError("L'API Alma remonte l'erreur suivante :  {} . Contacter l'administrateur".format(nb_api_call))
-        num_ligne = sum(1 for line in file) - 1
+        try:
+            num_ligne = sum(1 for line in file) - 1  
+        except :
+            raise ValidationError("Le fichier doit être un fichier csv, txt ou tsv")
+        
         logger.debug(num_ligne)
         if (num_ligne*3) > (int(nb_api_call) - 10000) :
             raise ValidationError("Nous ne disposons que de {} appels d'API pour la journée. Votre fichier contient {} lignes. Il faut deux appels par ligne pour traiter le fichier. Merci de diminuer le nombre de lignes à traiter".format(nb_api_call,num_ligne))
