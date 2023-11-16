@@ -50,7 +50,7 @@ def csv_content_validator(csv_upload):
     item_data = reponsexml.find("xs:complexType[@name='item_data']/xs:all",XSD)
     for field in headers:
         if item_data.find("xs:element[@name='{}']".format(field),XSD):
-            if (item_data.find("xs:element[@name='{}']/xs:annotation/xs:appinfo/xs:tags".format(field),XSD).text == 'api get post put') :
+            if ('put' in item_data.find("xs:element[@name='{}']/xs:annotation/xs:appinfo/xs:tags".format(field),XSD).text) :
                 logger.info("Le champ {} peut bien être modifié par API".format(field))
             else :
                 raise ValidationError('Erreur nommage colonne : {} n''est pas un champ autorisé à l''écriture dans Alma'.format(field))

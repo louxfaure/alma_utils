@@ -43,7 +43,7 @@ def thread(x):
 
     status,item = alma_api.get_item_with_barcode(barcode, accept='json')
     # logger.info("{}:{}:{}:{}:{}".format(x[1],x[2],x[3],x[4],x[5]))
-    complex_fields = ["pattern_type","library","alternative_call_number_type","physical_condition","permanent_call_number_type","temp_library","temp_location","temp_call_number_type","temp_policy","policy","break_indicator"]
+    complex_fields = ["pattern_type","library","location","alternative_call_number_type","physical_condition","permanent_call_number_type","temp_library","temp_location","temp_call_number_type","temp_policy","policy","break_indicator"]
     if status == "Error" :
         logger.error("{}:{}:{}:{}".format(idx,process.pid,barcode,item))
         return barcode,"Erreur",item
