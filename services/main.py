@@ -74,7 +74,6 @@ def handle_uploaded_file(process):
         api_key = settings.ALMA_TEST_API_KEY[process.institution]
     else :
         api_key = settings.ALMA_API_KEY[process.institution]
-    report_file = '/home/loux/Téléchargements/tmp/update-item_rapport_{}.csv'.format(process.id)
     # Lecture du fichier
     from_codec = get_encoding_type(process.file_upload.path)
     with open(process.file_upload.path, 'r', encoding=from_codec, newline='') as csvfile:
