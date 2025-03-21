@@ -7,3 +7,4 @@ Ce programme est un module Django qui permet de modifier en masse des exemplaire
 - Le programme est limité par le nombre d'appel aux Apis autaurisés par institution celui-ci est de 500 000 pour UB et 100 000 pour les autres institutions. 
   Nous réservons 10 000 appels pour les autres programmes actifs. Ce traitement consomme 2 appels par ligne traitée. Pensez à adapter la taille de vos fichiers.
 - VOus ne devez pas lancer plusieurs traitement simultanément.
+![Capture de la page de lancement du traitement](doc.jpg)
